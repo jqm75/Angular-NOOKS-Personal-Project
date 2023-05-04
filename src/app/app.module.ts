@@ -10,6 +10,7 @@ import { CalendarComponent } from './calendar/calendar.component';
 import { LayoutComponent } from './layout/layout.component';
 import { HeaderComponent } from './layout/components/header/header.component';
 import { FooterComponent } from './layout/components/footer/footer.component';
+import { HomeComponent } from './home/home.component';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { FooterComponent } from './layout/components/footer/footer.component';
     CalendarComponent,
     LayoutComponent,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
