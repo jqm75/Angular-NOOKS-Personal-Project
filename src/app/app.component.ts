@@ -7,4 +7,5 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'S9-Angular4-NOOKS-Personal-Project';
+  
 }

@@ -1,14 +1,24 @@
-import { NgModule } from '@angular/core';
+import { NgModule, Component } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
-import { FullCalendarModule } from '@fullcalendar/angular';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
+import { FullCalendarModule } from '@fullcalendar/angular';
+import { CalendarComponent } from './calendar/calendar.component';
+
+import { LayoutComponent } from './layout/layout.component';
+import { HeaderComponent } from './layout/components/header/header.component';
+import { FooterComponent } from './layout/components/footer/footer.component';
+
+
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    CalendarComponent,
+    LayoutComponent,
+    HeaderComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
