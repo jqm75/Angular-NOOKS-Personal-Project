@@ -93,9 +93,15 @@
               "src/assets"
             ],
             "styles": [
+              "src/assets/fonts/dinNext/dinNextStyle.css",
+              "src/assets/fonts/matterhorn/matterhornStyle.css",
+              "bootstrap/scss/bootstrap.scss",
+              "bootstrap-icons/font/fonts/boostrap-icons.scss",
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/bootstrap/dist/js/bootstrap.js"
+            ]
           }
         }
       }
