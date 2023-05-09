@@ -1,0 +1,15 @@
+<ng-template #modalContent let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Añadir evento</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+    </div>
+    <div class="modal-body">
+        <form>
+            <!-- Aquí irá el contenido del formulario -->
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Cancelar</button>
+<!--   <button type="button" class="btn btn-primary" (click)="agregarEvento(modal)">Guardar</button> -->    
+    </div>
+</ng-template>
