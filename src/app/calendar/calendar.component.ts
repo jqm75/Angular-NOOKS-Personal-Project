@@ -1,14 +1,20 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectorRef, ViewChild, OnInit } from '@angular/core';
 
-import { CalendarOptions, DateSelectArg, EventClickArg, EventApi } from '@fullcalendar/core';
+import { CalendarOptions, DateSelectArg, EventClickArg, EventApi, EventInput } from '@fullcalendar/core';
 import interactionPlugin from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import { INITIAL_EVENTS, createEventId } from './event-utils';
+
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+
 // import allLocales from '@fullcalendar/core/locales-all';
 import caLocale from '@fullcalendar/core/locales/ca';
 import esLocale from '@fullcalendar/core/locales/es';
+import { ModalService } from 'src/app/services/modal.service';
+import { CalendarService } from '../services/calendar.service';
+
 
 
 @Component({
@@ -16,46 +22,76 @@ import esLocale from '@fullcalendar/core/locales/es';
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.scss']
 })
-export class CalendarComponent {
-  calendarVisible = true;
-  calendarOptions: CalendarOptions = {
-    plugins: [
-      interactionPlugin,
-      dayGridPlugin,
-      timeGridPlugin,
-      listPlugin,
-    ],
-    headerToolbar: {
-      left: 'prev,next today',
-      center: 'title',
-      right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
-    },
-    locales: [esLocale, caLocale],
-    locale: 'es',
-    initialView: 'timeGridWeek',
-    allDaySlot: false,
-    initialEvents: INITIAL_EVENTS, // alternatively, use the `events` setting to fetch from a feed
-    weekends: true,
-    editable: true,
-    selectable: true,
-    selectMirror: true,
-    dayMaxEvents: true,
-    select: this.handleDateSelect.bind(this),
-    eventClick: this.handleEventClick.bind(this),
-    eventsSet: this.handleEvents.bind(this)
-    /* you can update a remote database when these fire:
-    eventAdd:
-    eventChange:
-    eventRemove:
-    */
-  };
-  currentEvents: EventApi[] = [];
 
-  constructor(private changeDetector: ChangeDetectorRef) {
+
+export class CalendarComponent implements OnInit {
+
+  calendarVisible = true;
+  calendarOptions!: CalendarOptions 
+  currentEvents: EventApi[] = []
+
+  @ViewChild('modalContent') modalContent: any;
+
+  constructor(
+      private modalService: ModalService,
+      private changeDetector: ChangeDetectorRef,
+      private calendarService: CalendarService,
+      //private modalService: NgbModal
+  ) {}
+  ngOnInit(): void {
+    this.calendarService.getAllEvents().subscribe(events => {
+      
+      const finishEvents = events.map(e => {
+        const event: EventInput = {
+          id: String(e.id_activity),
+          start: e.f_ini,
+          end: e.f_fin,
+          color: e.color
+        }
+        if (e.name_sub_classroom_work) {
+          event.title = e.name_sub_classroom_work
+        }
+        return event
+      })
+
+      this.calendarOptions = {
+        plugins: [
+          interactionPlugin,
+          dayGridPlugin,
+          timeGridPlugin,
+          listPlugin,
+        ],
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+        },
+        locales: [esLocale, caLocale], // Idioma
+        locale: 'es',
+        initialView: 'timeGridWeek',
+        allDaySlot: false,
+        initialEvents: finishEvents, // Alternatively, use the `events` setting to fetch from a feed
+        weekends: false,
+        editable: true,
+        selectable: true,
+        selectMirror: true,
+        dayMaxEvents: true,
+        select: this.handleDateSelect.bind(this),
+        eventClick: this.handleEventClick.bind(this),
+        eventsSet: this.handleEvents.bind(this)
+        /* you can update a remote database when these fire:
+        eventAdd:
+        eventChange:
+        eventRemove:
+        */
+      };
+
+    })
   }
 
   handleCalendarToggle() {
     this.calendarVisible = !this.calendarVisible;
+
   }
 
   handleWeekendsToggle() {
@@ -63,13 +99,16 @@ export class CalendarComponent {
     calendarOptions.weekends = !calendarOptions.weekends;
   }
 
+  //TODO: Lanzar Modal. Y montar un formulario dentro.
   handleDateSelect(selectInfo: DateSelectArg) {
-    const title = prompt('Please enter a new title for your event');
+    const title = 'título'
     const calendarApi = selectInfo.view.calendar;
+
+    this.addNewEvent();
 
     calendarApi.unselect(); // clear date selection
 
-    if (title) {
+    /* if (title) {
       calendarApi.addEvent({
         id: createEventId(),
         title,
@@ -77,11 +116,39 @@ export class CalendarComponent {
         end: selectInfo.endStr,
         //allDay: selectInfo.allDay,
         allDay: false,
-        color: 'green',
+        //color: 'green',
         durationEditable: true
       });
-    }
+    } */
   }
+  addNewEvent() {
+    this.modalService.openModal('addEvent')
+  }
+  // handleDateSelect(selectInfo: DateSelectArg) {
+  //   this.modalService.open(this.modalContent, { size: 'lg', backdrop: 'static' });
+  //   this.selectedInfo = selectInfo;
+  // }
+  
+  // addEvent(modal: any) {
+  //   const title = /* Obtén el valor del título del formulario */;
+  //   const calendarApi = this.selectedInfo.view.calendar;
+  
+  //   calendarApi.unselect(); // clear date selection
+  
+  //   if (title) {
+  //     calendarApi.addEvent({
+  //       id: createEventId(),
+  //       title,
+  //       start: this.selectedInfo.startStr,
+  //       end: this.selectedInfo.endStr,
+  //       allDay: false,
+  //       color: 'green',
+  //       durationEditable: true
+  //     });
+  //   }
+  
+  //   modal.dismiss(); // Cierra el modal
+  // }
 
   handleEventClick(clickInfo: EventClickArg) {
     if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
@@ -93,4 +160,5 @@ export class CalendarComponent {
     this.currentEvents = events;
     this.changeDetector.detectChanges();
   }
+  
 }
