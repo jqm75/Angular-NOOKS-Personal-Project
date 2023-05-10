@@ -24,5 +24,13 @@ export class EventModalComponent {
     this.modalFunctions.open(this.modalContent);
   }
 
-  //TODO: Crear formulario aquí.
+  addEvent(){
+
+    // Aquí: Recoger datos del formulario y enviarlo a un servicio. Con un 'subcribe' a un 'subject' con array o un objeto.
+
+  }
+
+  //TODO: Crear formulario reactivo aquí.
+
+  
 }

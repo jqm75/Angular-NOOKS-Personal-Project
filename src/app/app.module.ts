@@ -1,4 +1,5 @@
 import { NgModule, Component } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -27,6 +28,7 @@ import { EventModalComponent } from './_modal/event-modal/event-modal.component'
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     AppRoutingModule,
     FullCalendarModule
   ],

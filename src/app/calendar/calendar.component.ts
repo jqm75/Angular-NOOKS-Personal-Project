@@ -1,6 +1,6 @@
-import { Component, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { Component, ChangeDetectorRef, ViewChild, OnInit } from '@angular/core';
 
-import { CalendarOptions, DateSelectArg, EventClickArg, EventApi } from '@fullcalendar/core';
+import { CalendarOptions, DateSelectArg, EventClickArg, EventApi, EventInput } from '@fullcalendar/core';
 import interactionPlugin from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -13,6 +13,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import caLocale from '@fullcalendar/core/locales/ca';
 import esLocale from '@fullcalendar/core/locales/es';
 import { ModalService } from 'src/app/services/modal.service';
+import { CalendarService } from '../services/calendar.service';
 
 
 
@@ -23,40 +24,10 @@ import { ModalService } from 'src/app/services/modal.service';
 })
 
 
-export class CalendarComponent {
+export class CalendarComponent implements OnInit {
 
   calendarVisible = true;
-  calendarOptions: CalendarOptions = {
-    plugins: [
-      interactionPlugin,
-      dayGridPlugin,
-      timeGridPlugin,
-      listPlugin,
-    ],
-    headerToolbar: {
-      left: 'prev,next today',
-      center: 'title',
-      right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
-    },
-    locales: [esLocale, caLocale], // Idioma
-    locale: 'es',
-    initialView: 'timeGridWeek',
-    allDaySlot: false,
-    initialEvents: INITIAL_EVENTS, // Alternatively, use the `events` setting to fetch from a feed
-    weekends: true,
-    editable: true,
-    selectable: true,
-    selectMirror: true,
-    dayMaxEvents: true,
-    select: this.handleDateSelect.bind(this),
-    eventClick: this.handleEventClick.bind(this),
-    eventsSet: this.handleEvents.bind(this)
-    /* you can update a remote database when these fire:
-    eventAdd:
-    eventChange:
-    eventRemove:
-    */
-  };
+  calendarOptions!: CalendarOptions 
   currentEvents: EventApi[] = []
 
   @ViewChild('modalContent') modalContent: any;
@@ -64,11 +35,63 @@ export class CalendarComponent {
   constructor(
       private modalService: ModalService,
       private changeDetector: ChangeDetectorRef,
+      private calendarService: CalendarService,
       //private modalService: NgbModal
   ) {}
+  ngOnInit(): void {
+    this.calendarService.getAllEvents().subscribe(events => {
+      
+      const finishEvents = events.map(e => {
+        const event: EventInput = {
+          id: String(e.id_activity),
+          start: e.f_ini,
+          end: e.f_fin,
+          color: e.color
+        }
+        if (e.name_sub_classroom_work) {
+          event.title = e.name_sub_classroom_work
+        }
+        return event
+      })
+
+      this.calendarOptions = {
+        plugins: [
+          interactionPlugin,
+          dayGridPlugin,
+          timeGridPlugin,
+          listPlugin,
+        ],
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+        },
+        locales: [esLocale, caLocale], // Idioma
+        locale: 'es',
+        initialView: 'timeGridWeek',
+        allDaySlot: false,
+        initialEvents: finishEvents, // Alternatively, use the `events` setting to fetch from a feed
+        weekends: false,
+        editable: true,
+        selectable: true,
+        selectMirror: true,
+        dayMaxEvents: true,
+        select: this.handleDateSelect.bind(this),
+        eventClick: this.handleEventClick.bind(this),
+        eventsSet: this.handleEvents.bind(this)
+        /* you can update a remote database when these fire:
+        eventAdd:
+        eventChange:
+        eventRemove:
+        */
+      };
+
+    })
+  }
 
   handleCalendarToggle() {
     this.calendarVisible = !this.calendarVisible;
+
   }
 
   handleWeekendsToggle() {
@@ -93,7 +116,7 @@ export class CalendarComponent {
         end: selectInfo.endStr,
         //allDay: selectInfo.allDay,
         allDay: false,
-        color: 'green',
+        //color: 'green',
         durationEditable: true
       });
     } */
