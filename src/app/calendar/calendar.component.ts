@@ -5,6 +5,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
+import { INITIAL_EVENTS, createEventId } from './event-utils';
 
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
@@ -14,15 +15,18 @@ import esLocale from '@fullcalendar/core/locales/es';
 import { ModalService } from 'src/app/services/modal.service';
 import { CalendarService } from '../services/calendar.service';
 
+
+
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.scss']
 })
 
-export class CalendarComponent implements OnInit {
 
-  currentEvents: EventApi[] = [];
+export class CalendarComponent implements OnInit {
+  
+  calendarVisible:boolean = true;
   calendarOptions: CalendarOptions = {
     plugins: [
       dayGridPlugin,
@@ -42,20 +46,22 @@ export class CalendarComponent implements OnInit {
     editable: true,
     selectable: true,
     selectMirror: true,
+    select: this.handleDateSelect.bind(this),
     dayMaxEvents: true
   };
+  currentEvents: EventApi[] = []
 
   @ViewChild('modalContent') modalContent: any;
-
+  
   constructor(
-    private modalService: ModalService,
-    private changeDetector: ChangeDetectorRef,
-    private calendarService: CalendarService,
-    //private modalService: NgbModal
-  ) { }
+      private modalService: ModalService,
+      private changeDetector: ChangeDetectorRef,
+      private calendarService: CalendarService,
+      //private modalService: NgbModal
+  ) {}
   ngOnInit(): void {
     this.calendarService.getAllEvents().subscribe(events => {
-
+      
       const finishEvents = events.map(e => {
         const event: EventInput = {
           id: String(e.id_activity),
@@ -64,21 +70,28 @@ export class CalendarComponent implements OnInit {
           color: e.color,
           //title: e.name_sub
         }
-
+        
         return event
       })
 
     })
+  }
 
+  handleCalendarToggle() {
+    this.calendarVisible = !this.calendarVisible;
 
   }
 
+/*   handleWeekendsToggle() {
+    const { calendarOptions } = this;
+    calendarOptions.weekends = !calendarOptions.weekends;
+  } */
 
   //TODO: Lanzar Modal. Y montar un formulario dentro.
   handleDateSelect(selectInfo: DateSelectArg) {
     const title = 'título'
     const calendarApi = selectInfo.view.calendar;
-
+    alert('Jau!')
     this.addNewEvent();
 
     calendarApi.unselect(); // clear date selection
@@ -97,9 +110,10 @@ export class CalendarComponent implements OnInit {
     } */
   }
   addNewEvent() {
+    
     this.modalService.openModal('addEvent')
   }
-
+  
   handleEventClick(clickInfo: EventClickArg) {
     if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
       clickInfo.event.remove();
@@ -110,7 +124,5 @@ export class CalendarComponent implements OnInit {
     this.currentEvents = events;
     this.changeDetector.detectChanges();
   }
-
-
-
+  
 }
