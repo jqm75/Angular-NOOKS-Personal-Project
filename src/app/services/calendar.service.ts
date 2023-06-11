@@ -20,4 +20,4 @@ export class CalendarService {
 }
 
 
-//TODO: Crear función getActivities. Full CAlendar GET EVENTS
+//TODO: Crear función getActivities. Full CAlendar GET EVENTS. Hacer función updatEvent

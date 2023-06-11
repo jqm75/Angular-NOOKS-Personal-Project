@@ -1,6 +1,6 @@
 <div class='demo-app'>
 
-    <div class='demo-app-sidebar'>
+<!--     <div class='demo-app-sidebar'>
         <div class='demo-app-sidebar-section'>
             <h2>Instructions</h2>
             <ul>
@@ -15,12 +15,12 @@
                 toggle whole calendar
             </label>
         </div>
-<!--         <div class='demo-app-sidebar-section'>
+        <div class='demo-app-sidebar-section'>
             <label>
                 <input type='checkbox' [checked]='calendarOptions.weekends' (change)='handleWeekendsToggle()' />
                 toggle weekends
             </label>
-        </div> -->
+        </div>
         <div class='demo-app-sidebar-section'>
             <h2>All Events ({{currentEvents.length}})</h2>
             <ul>
@@ -30,7 +30,7 @@
                 </li>
             </ul>
         </div>
-    </div>
+    </div> -->
 
     <div class='demo-app-main'>
         <full-calendar *ngIf='calendarVisible' [options]='calendarOptions'>

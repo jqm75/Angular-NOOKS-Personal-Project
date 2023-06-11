@@ -79,10 +79,9 @@ export class CalendarComponent implements OnInit {
 
   handleCalendarToggle() {
     this.calendarVisible = !this.calendarVisible;
-
   }
 
-/*   handleWeekendsToggle() {
+  /* handleWeekendsToggle() {
     const { calendarOptions } = this;
     calendarOptions.weekends = !calendarOptions.weekends;
   } */
@@ -91,12 +90,10 @@ export class CalendarComponent implements OnInit {
   handleDateSelect(selectInfo: DateSelectArg) {
     const title = 'título'
     const calendarApi = selectInfo.view.calendar;
-    alert('Jau!')
     this.addNewEvent();
-
     calendarApi.unselect(); // clear date selection
 
-    /* if (title) {
+    if (title) {
       calendarApi.addEvent({
         id: createEventId(),
         title,
@@ -104,10 +101,10 @@ export class CalendarComponent implements OnInit {
         end: selectInfo.endStr,
         //allDay: selectInfo.allDay,
         allDay: false,
-        //color: 'green',
+        color: 'green',
         durationEditable: true
       });
-    } */
+    }
   }
   addNewEvent() {
     
