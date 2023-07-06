@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ViewChild, TemplateRef } from '@angular/core';
 import { ModalService } from 'src/app/services/modal.service';
+import { CalendarService } from 'src/app/services/calendar.service';
 
 @Component({
   selector: 'app-event-modal',
@@ -16,6 +17,7 @@ export class EventModalComponent {
   constructor(
     private modalFunctions: NgbModal,
     private modalService: ModalService,
+    private calendarService : CalendarService,
   ) {
     this.modalService.modals['addEvent'] = this
   }
@@ -25,9 +27,8 @@ export class EventModalComponent {
   }
 
   addEvent(){
-
+    this.calendarService.addEvent()
     // Aquí: Recoger datos del formulario y enviarlo a un servicio. Con un 'subcribe' a un 'subject' con array o un objeto.
-
   }
 
   //TODO: Crear formulario reactivo aquí.

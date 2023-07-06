@@ -57,7 +57,6 @@ export class CalendarComponent implements OnInit {
       private modalService: ModalService,
       private changeDetector: ChangeDetectorRef,
       private calendarService: CalendarService,
-      //private modalService: NgbModal
   ) {}
   ngOnInit(): void {
     this.calendarService.getAllEvents().subscribe(events => {
@@ -77,6 +76,14 @@ export class CalendarComponent implements OnInit {
     })
   }
 
+  handleDateSelect( selectInfo: DateSelectArg ) {
+    
+    this.calendarService.selectInfo = selectInfo
+    this.modalService.openModal('addEvent')
+
+  }
+
+
   handleCalendarToggle() {
     this.calendarVisible = !this.calendarVisible;
   }
@@ -86,30 +93,7 @@ export class CalendarComponent implements OnInit {
     calendarOptions.weekends = !calendarOptions.weekends;
   } */
 
-  //TODO: Lanzar Modal. Y montar un formulario dentro.
-  handleDateSelect(selectInfo: DateSelectArg) {
-    const title = 'título'
-    const calendarApi = selectInfo.view.calendar;
-    this.addNewEvent();
-    calendarApi.unselect(); // clear date selection
 
-    if (title) {
-      calendarApi.addEvent({
-        id: createEventId(),
-        title,
-        start: selectInfo.startStr,
-        end: selectInfo.endStr,
-        //allDay: selectInfo.allDay,
-        allDay: false,
-        color: 'green',
-        durationEditable: true
-      });
-    }
-  }
-  addNewEvent() {
-    
-    this.modalService.openModal('addEvent')
-  }
   
   handleEventClick(clickInfo: EventClickArg) {
     if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
