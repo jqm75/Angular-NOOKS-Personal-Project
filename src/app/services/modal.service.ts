@@ -11,6 +11,7 @@ export class ModalService {
     constructor(private allModals: NgbModal) { }
 
     openModal(key: string, object?: any) {
+
         if (object)
             this.modals[key].open(object);
         else

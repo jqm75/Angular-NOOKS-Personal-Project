@@ -4,21 +4,23 @@
         <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
     </div>
     <div class="modal-body">
-        <form>
+        <form [formGroup]="eventForm">
             <!-- FORMULARIO -->
             <h5>Docent</h5>
             <div class="form-floating mb-3">
-                <input type="name" class="form-control" id="floatingInput" placeholder="Nom...">
+                <input class="form-control" id="floatingInput" placeholder="Nom..." formControlName="name">
                 <label for="floatingInput">Nom</label>
             </div>
             <div class="form-floating mb-3">
-                <input type="surname" class="form-control" id="floatingInput" placeholder="Cognom...">
+                <input class="form-control" id="floatingInput" placeholder="Cognom..."
+                    formControlName="surname">
                 <label for="floatingInput">Cognom</label>
             </div>
 
             <h5>Curs</h5>
             <div class="form-floating mb-3">
-                <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
+                <select class="form-select" id="floatingSelect" aria-label="Floating label select example"
+                    formControlName="group">
                     <option selected>Obre per veure les opcions</option>
                     <option value="1">Infantil 3A</option>
                     <option value="2">Infantil 3B</option>
@@ -32,26 +34,26 @@
             <h5>Activitat</h5>
             <div class="form-check form-check-inline ">
 
-                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1"
-                    value="option1">
+                <input class="form-check-input" type="radio" id="inlineRadio1" value="option1" formControlName="activity">
                 <label
                     class="form-check-label text-success-emphasis bg-success-subtle border border-success-subtle rounded-2 ps-2 pe-2"
                     for="inlineRadio1">Racons</label>
             </div>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2"
-                    value="option2">
+                <input class="form-check-input" type="radio" id="inlineRadio2" value="option2" formControlName="activity">
                 <label class="form-check-label" for="inlineRadio2">Ambients</label>
             </div>
             <div class="form-check form-check-inline mb-3">
-                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3"
-                    value="option3">
+                <input class="form-check-input" type="radio" id="inlineRadio3" value="option3" formControlName="activity" >
                 <label class="form-check-label" for="inlineRadio3">Treball d'aula</label>
             </div>
             <h5>Imatge de l'actividat</h5>
             <div class="mb-3">
-                <input class="form-control form-control-sm" id="formFileSm" type="file">
+                <input class="form-control form-control-sm" id="formFileSm" type="file" formControlName="image">
             </div>
+
+            <p>{{ eventForm.value | json }}</p>
+
         </form>
     </div>
     <div class="modal-footer">

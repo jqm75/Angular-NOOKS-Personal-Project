@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef, ViewChild, OnInit } from '@angular/core';
+import { Component, ChangeDetectorRef, ViewChild, OnInit, AfterViewInit } from '@angular/core';
 
 import { CalendarOptions, DateSelectArg, EventClickArg, EventApi, EventInput } from '@fullcalendar/core';
 import interactionPlugin from '@fullcalendar/interaction';
@@ -14,6 +14,7 @@ import caLocale from '@fullcalendar/core/locales/ca';
 import esLocale from '@fullcalendar/core/locales/es';
 import { ModalService } from 'src/app/services/modal.service';
 import { CalendarService } from '../services/calendar.service';
+import { Observable } from 'rxjs';
 
 
 
@@ -25,6 +26,7 @@ import { CalendarService } from '../services/calendar.service';
 
 
 export class CalendarComponent implements OnInit {
+  finishEvents!: Observable<EventInput[]>
   
   calendarVisible:boolean = true;
   calendarOptions: CalendarOptions = {
@@ -51,29 +53,28 @@ export class CalendarComponent implements OnInit {
   };
   currentEvents: EventApi[] = []
 
-  @ViewChild('modalContent') modalContent: any;
+
+  // @ViewChild('modalContent') modalContent: any;
+
+  eventCalendar = {
+    title: "Mi evento",
+    start: new Date(),
+    end: new Date(new Date().getTime() + 30 * 60 * 1000),
+    isStart: true,
+    isMirror: true
+  };
+  
+  
+
+  
   
   constructor(
-      private modalService: ModalService,
-      private changeDetector: ChangeDetectorRef,
-      private calendarService: CalendarService,
-  ) {}
+    private modalService: ModalService,
+    private changeDetector: ChangeDetectorRef,
+    private calendarService: CalendarService,
+    ) {}
   ngOnInit(): void {
-    this.calendarService.getAllEvents().subscribe(events => {
-      
-      const finishEvents = events.map(e => {
-        const event: EventInput = {
-          id: String(e.id_activity),
-          start: e.f_ini,
-          end: e.f_fin,
-          color: e.color,
-          //title: e.name_sub
-        }
-        
-        return event
-      })
-
-    })
+    this.finishEvents = this.getActivities()
   }
 
   handleDateSelect( selectInfo: DateSelectArg ) {
@@ -106,4 +107,11 @@ export class CalendarComponent implements OnInit {
     this.changeDetector.detectChanges();
   }
   
+  getActivities() {
+    return this.calendarService.getAllEvents();
+  }
+  
+  updateEvent(event: EventInput) {
+    this.calendarService.updateEvent(event);
+  }
 }
