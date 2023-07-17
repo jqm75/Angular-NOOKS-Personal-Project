@@ -6,13 +6,15 @@ import { DateSelectArg, EventInput } from '@fullcalendar/core';
 import { createEventId } from '../calendar/event-utils';
 import { ApiCalendarResponse, EventCalendar } from '../interfaces';
 import { FormGroup } from '@angular/forms';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CalendarService {
 
-  private URL_API = 'http://nooks.muchplanet.com/api.php'
+  //private URL_API = 'http://nooks.muchplanet.com/api.php'
+  private URL_API = environment.apiBaseUrl;
   public events: EventInput[] | undefined
   public selectInfo!: DateSelectArg
 
@@ -21,6 +23,9 @@ export class CalendarService {
   constructor(private http: HttpClient) { }
 
   public getAllEvents(): Observable<EventInput[]> {
+    console.log(this.URL_API);
+ 
+    
     return this.http.get<ApiCalendarResponse[]>(`${this.URL_API}?action=get-events`).pipe(
       map(events => events.map(e => {
         const event: EventInput = {
