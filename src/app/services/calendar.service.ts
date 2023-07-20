@@ -1,10 +1,10 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, map, tap } from 'rxjs';
 
 import { DateSelectArg, EventInput } from '@fullcalendar/core';
 import { createEventId } from '../calendar/event-utils';
-import { ApiCalendarResponse, EventCalendar } from '../interfaces';
+import { ApiCalendarResponse } from '../interfaces';
 import { FormGroup } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 
@@ -13,8 +13,8 @@ import { environment } from 'src/environments/environment';
 })
 export class CalendarService {
 
-  //private URL_API = 'http://nooks.muchplanet.com/api.php'
-  private URL_API = environment.apiBaseUrl;
+  private URL_API = 'http://nooks.muchplanet.com/api.php'
+  //private URL_API = environment.apiBaseUrl+'/api.php?action=get-events';
   public events: EventInput[] | undefined
   public selectInfo!: DateSelectArg
 
@@ -33,7 +33,7 @@ export class CalendarService {
           start: e.f_ini,
           end: e.f_fin,
           color: e.color,
-          //title: e.name_sub
+          title: e.name_sub
         }
         return event
       })),
@@ -43,11 +43,9 @@ export class CalendarService {
 
   addEvent(form: FormGroup) {
 
-    alert('Hola lo que sea');
-
     const formData = form.value;
 
-    console.log('🚀 ~ formData:', formData)
+    //console.log('🚀 ~ formData:', formData)
 
     const title = formData.title;
     const calendarApi = this.selectInfo.view.calendar;
@@ -60,11 +58,12 @@ export class CalendarService {
       end: formData.end,
       allDay: false,
       color: 'green',
-      durationEditable: true
+      durationEditable: false
     }
 
+    const headers = new HttpHeaders({'Content-Type': 'application/json'});
     calendarApi.addEvent(currentEvent);
-    // this.http.post(`${this.URL_API}?action=insert-event`, event).subscribe(console.log)
+    this.http.post(`${ this.URL_API }`, currentEvent, { headers }).subscribe(console.log) // Aquí algo huele a bacon quemao
     return currentEvent
 
   }
@@ -95,7 +94,5 @@ export class CalendarService {
     );
   }
 }
-
-
 
 //TODO: Crear función getActivities. Full Calendar GET EVENTS. Hacer función updateEvent

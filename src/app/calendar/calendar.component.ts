@@ -72,6 +72,7 @@ export class CalendarComponent implements OnInit {
     private modalService: ModalService,
     private changeDetector: ChangeDetectorRef,
     private calendarService: CalendarService,
+    
     ) {}
   ngOnInit(): void {
     this.finishEvents = this.getActivities()
@@ -108,6 +109,7 @@ export class CalendarComponent implements OnInit {
   }
   
   getActivities() {
+    console.log(this.calendarService.getAllEvents())
     return this.calendarService.getAllEvents();
   }
   

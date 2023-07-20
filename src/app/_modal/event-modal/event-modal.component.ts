@@ -43,10 +43,13 @@ export class EventModalComponent {
     if (this.eventForm.valid) {
     
       this.calendarService.addEvent(this.eventForm);
+
       //TODO si todo está bien en el post hacer esto: crear event emitter y pasar por output al padre (calendar) que se ha guardado correctamente para volver a hacer la petición de getAll al server
       // if todo bien  this.serverChanged.emit(true)
       // if todo mal  this.serverChanged.emit(false)
       //
+
+
       this.modalFunctions.dismissAll();
     } else {
       console.log('El formulario no es válido');

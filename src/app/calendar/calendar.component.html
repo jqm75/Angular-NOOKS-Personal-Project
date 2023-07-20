@@ -36,7 +36,7 @@
         <full-calendar *ngIf='calendarVisible' [options]='calendarOptions' [events]="finishEvents | async">
             <!-- si app-event-modal estuviese aquí sería (serverChanged)="isNewDataServer($event)" -->
             <ng-template #eventContent let-arg>
-                <b>{{ arg.timeText }}</b>
+                <b>{{ arg.event.start | date:'h:mm' }}</b>
                 <i>{{ arg.event.title }}</i>
             </ng-template>
         </full-calendar>

@@ -5,8 +5,8 @@ export interface ApiCalendarResponse {
     deleted_at:        Date;
     description:       string;
     environment_id:    number | null;
-    f_fin:             Date;
     f_ini:             Date;
+    f_fin:             Date;
     goals:             string;
     id_activity:       number;
     name_sub:          string;
